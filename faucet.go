@@ -49,7 +49,7 @@ const tpl = `
 
 var pageTemplate = template.Must(template.New("page").Parse(tpl))
 
-const amount = "10fermion"
+const amount = "10steak"
 const key = "faucet"
 const node = "http://localhost:46657"
 const chain = "test-chain-Ra9zi4"
