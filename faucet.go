@@ -84,7 +84,7 @@ func main() {
 
 	faucet = os.Getenv("FAUCET")
 	if faucet == "" {
-		faucet = "faucet"
+		faucet = "C7582FB62972E7345734CF7DE1A6FD49B0868994"
 	}
 
 	http.HandleFunc("/", faucetHandler)
@@ -108,6 +108,7 @@ func executeCmd(command string, writes ...string) {
 
 func executeGetSequence(addr string) (sequence int64) {
 	command := fmt.Sprintf("gaiacli account %v --node=%v --chain-id=%v", addr, node, chain)
+	fmt.Println(command)
 	cmd := getCmd(command)
 	bz, _ := cmd.CombinedOutput()
 	out := strings.Trim(string(bz), "\n")
@@ -120,6 +121,8 @@ func executeGetSequence(addr string) (sequence int64) {
 	json.Unmarshal([]byte(res["value"]), &value)
 
 	json.Unmarshal([]byte(value["sequence"]), &sequence)
+
+	fmt.Println(sequence)
 
 	return sequence
 }
@@ -170,6 +173,9 @@ func getCoinsHandler(w http.ResponseWriter, r *http.Request) {
 	sequence := executeGetSequence(faucet)
 
 	cmd := fmt.Sprintf("gaiacli send --amount=%v --to=%v --name=%v --node=%v --chain-id=%v --sequence=%v", amount, addr, key, node, chain, sequence)
+
+	fmt.Println(cmd)
+
 	executeCmd(cmd, pass)
 
 	faucetHandler(w, r)
