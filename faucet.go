@@ -49,15 +49,20 @@ const tpl = `
 
 var pageTemplate = template.Must(template.New("page").Parse(tpl))
 
-const amount = "10steak"
-const key = "faucet"
-const node = "http://localhost:46657"
-const chain = "test-chain-Ra9zi4"
-const pass = "1234567890"
-const faucet = "BB5ED43DA0FA8EB0CA447DA966C9A33BC4187E63"
+var amount string
+var key string
+var node string
+var chain string
+var pass string
+var faucet string
 
 func main() {
-	fmt.Println("faucet")
+	amount = os.Getenv("AMOUNT")
+	key = os.Getenv("KEY")
+	node = os.Getenv("NODE")
+	chain = os.Getenv("CHAIN")
+	pass = os.Getenv("PASS")
+	faucet = os.Getenv("FAUCET")
 
 	http.HandleFunc("/", faucetHandler)
 	http.HandleFunc("/claim", getCoinsHandler)
