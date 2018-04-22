@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -55,6 +56,7 @@ var node string
 var chain string
 var pass string
 var faucet string
+var sequence string
 
 func main() {
 	amount = os.Getenv("AMOUNT")
@@ -85,6 +87,11 @@ func main() {
 	faucet = os.Getenv("FAUCET")
 	if faucet == "" {
 		faucet = "C7582FB62972E7345734CF7DE1A6FD49B0868994"
+	}
+
+	sequence = os.Getenv("SEQUENCE")
+	if sequence == "" {
+		sequence = "0"
 	}
 
 	http.HandleFunc("/", faucetHandler)
@@ -171,13 +178,16 @@ func faucetHandler(w http.ResponseWriter, r *http.Request) {
 
 func getCoinsHandler(w http.ResponseWriter, r *http.Request) {
 	addr := r.FormValue("address")
-	sequence := executeGetSequence(faucet)
+	//sequence := executeGetSequence(faucet)
 
 	cmd := fmt.Sprintf("gaiacli send --amount=%v --to=%v --name=%v --node=%v --chain-id=%v --sequence=%v", amount, addr, key, node, chain, sequence)
-
 	fmt.Println(cmd)
 
 	executeCmd(cmd, pass)
+
+	i, _ := strconv.Atoi(sequence)
+	i += 1
+	sequence = strconv.Itoa(i)
 
 	faucetHandler(w, r)
 	return
