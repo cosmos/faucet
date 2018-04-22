@@ -58,11 +58,34 @@ var faucet string
 
 func main() {
 	amount = os.Getenv("AMOUNT")
+	if amount == "" {
+		amount = "10steak"
+	}
+
 	key = os.Getenv("KEY")
+	if key == "" {
+		key = "faucet"
+	}
+
 	node = os.Getenv("NODE")
+	if node == "" {
+		node = "http://localhost:46657"
+	}
+
 	chain = os.Getenv("CHAIN")
+	if chain == "" {
+		chain = "gaia-4000"
+	}
+
 	pass = os.Getenv("PASS")
+	if pass == "" {
+		pass = "1234567890"
+	}
+
 	faucet = os.Getenv("FAUCET")
+	if faucet == "" {
+		faucet = "faucet"
+	}
 
 	http.HandleFunc("/", faucetHandler)
 	http.HandleFunc("/claim", getCoinsHandler)
