@@ -116,12 +116,13 @@ func executeGetSequence(addr string) (sequence int64) {
 
 	var res map[string]json.RawMessage
 	json.Unmarshal([]byte(out), &res)
+	fmt.Println(res)
 
 	var value map[string]json.RawMessage
 	json.Unmarshal([]byte(res["value"]), &value)
+	fmt.Println(value)
 
 	json.Unmarshal([]byte(value["sequence"]), &sequence)
-
 	fmt.Println(sequence)
 
 	return sequence
