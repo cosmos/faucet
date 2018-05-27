@@ -152,7 +152,7 @@ func getCoinsHandler(w http.ResponseWriter, r *http.Request) {
 	addr := r.FormValue("address")
 	//sequence := executeGetSequence(faucet)
 
-	cmd := fmt.Sprintf("gaiacli send --amount=%v --to=%v --name=%v --node=%v --chain-id=%v --sequence=%v", amount, addr, key, node, chain, sequence)
+	cmd := fmt.Sprintf("gaiacli send --amount=%v --to=%v --name=%v --chain-id=%v --sequence=%v", amount, addr, key, chain, sequence)
 	fmt.Println(cmd)
 
 	executeCmd(cmd, pass)
