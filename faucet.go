@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"html/template"
 	"io"
@@ -61,12 +60,12 @@ var sequence string
 func main() {
 	amount = os.Getenv("AMOUNT")
 	if amount == "" {
-		amount = "10steak"
+		amount = "1steak"
 	}
 
 	key = os.Getenv("KEY")
 	if key == "" {
-		key = "faucet"
+		key = "default"
 	}
 
 	node = os.Getenv("NODE")
@@ -76,17 +75,12 @@ func main() {
 
 	chain = os.Getenv("CHAIN")
 	if chain == "" {
-		chain = "gaia-4000"
+		chain = "gaia-5001"
 	}
 
 	pass = os.Getenv("PASS")
 	if pass == "" {
 		pass = "1234567890"
-	}
-
-	faucet = os.Getenv("FAUCET")
-	if faucet == "" {
-		faucet = "C7582FB62972E7345734CF7DE1A6FD49B0868994"
 	}
 
 	sequence = os.Getenv("SEQUENCE")
@@ -111,28 +105,6 @@ func executeCmd(command string, writes ...string) {
 		wc.Write([]byte(write + "\n"))
 	}
 	cmd.Wait()
-}
-
-func executeGetSequence(addr string) (sequence int64) {
-	command := fmt.Sprintf("gaiacli account %v --node=%v --chain-id=%v", addr, node, chain)
-	fmt.Println(command)
-	cmd := getCmd(command)
-	bz, _ := cmd.CombinedOutput()
-	out := strings.Trim(string(bz), "\n")
-	time.Sleep(time.Second)
-
-	var res map[string]json.RawMessage
-	json.Unmarshal([]byte(out), &res)
-	fmt.Println(res)
-
-	var value map[string]json.RawMessage
-	json.Unmarshal([]byte(res["value"]), &value)
-	fmt.Println(value)
-
-	json.Unmarshal([]byte(value["sequence"]), &sequence)
-	fmt.Println(sequence)
-
-	return sequence
 }
 
 func goExecute(command string) (cmd *exec.Cmd, pipeIn io.WriteCloser, pipeOut io.ReadCloser) {
@@ -186,9 +158,33 @@ func getCoinsHandler(w http.ResponseWriter, r *http.Request) {
 	executeCmd(cmd, pass)
 
 	i, _ := strconv.Atoi(sequence)
-	i += 1
+	i++
 	sequence = strconv.Itoa(i)
 
 	faucetHandler(w, r)
 	return
 }
+
+/*
+func executeGetSequence(addr string) (sequence int64) {
+	command := fmt.Sprintf("gaiacli account %v --node=%v --chain-id=%v", addr, node, chain)
+	fmt.Println(command)
+	cmd := getCmd(command)
+	bz, _ := cmd.CombinedOutput()
+	out := strings.Trim(string(bz), "\n")
+	time.Sleep(time.Second)
+
+	var res map[string]json.RawMessage
+	json.Unmarshal([]byte(out), &res)
+	fmt.Println(res)
+
+	var value map[string]json.RawMessage
+	json.Unmarshal([]byte(res["value"]), &value)
+	fmt.Println(value)
+
+	json.Unmarshal([]byte(value["sequence"]), &sequence)
+	fmt.Println(sequence)
+
+	return sequence
+}
+*/
