@@ -3,7 +3,7 @@
   #form
     header
       h1 Cosmos Testnet Faucet
-      h2 testnet version: #[a(href="https://explorecosmos.network" target="_blank") gaia-6000]
+      h2 Hello intrepid explorer! You can use this form to get tokens for the #[strong `gaia-6000`] testnet. Don't have a testnet address yet? #[a(href="https://cosmos.network/testnet") Join the testnet!]
     form(v-on:submit.prevent='onSubmit', method='post')
       .li-form
         label(for='faucet-captcha') Captcha
@@ -12,7 +12,7 @@
         label(for='faucet-address') Testnet Address
         field#faucet-address(type='text', v-model='address', required='', size='lg' placeholder='Your testnet address')
       .li-form
-        btn(type='submit', value='Claim tokens', size='lg', color='primary')
+        btn(type='submit', value='Send me tokens', size='lg', color='primary')
   #links
     a(href="https://cosmos.network" target="_blank")
       .key Cosmos Website
@@ -85,6 +85,9 @@ export default {
   header
     padding 1rem 0
 
+    strong
+      font-weight 500
+
   h1
     font-size 1.5rem
     font-weight 500
@@ -92,6 +95,7 @@ export default {
 
   h2
     color var(--dim)
+    font-size sm
 
   label
     display none
@@ -106,16 +110,16 @@ export default {
 #links
   a
     display block
-    line-height 2rem
+    line-height 2.5rem
     border-top 1px solid var(--bc-dim)
     display flex
     justify-content space-between
     padding 0 1rem
-    margin-bottom 0.25rem
     .key
       color var(--dim)
     .value
       color var(--link)
+      font-size 0.75rem
     &:hover
       background var(--hover-bg)
       .key
@@ -126,4 +130,5 @@ export default {
   color var(--bc)
   font-size 0.75rem
   padding 2rem 1rem 1rem
+
 </style>
