@@ -15,35 +15,19 @@ import (
 
 const tpl = `
 <!doctype html>
-
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-
-	<title>Cosmos Hub Testnet Faucet</title>
+	<title>Cosmos Testnet Faucet</title>
 	<meta name="description" content="A faucet to get some coins.">
-	<meta name="author" content="Adrian Brink">
-
-	<link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet">
-	<link rel="stylesheet" href="https://unpkg.com/blaze/scss/dist/components.buttons.min.css">
-	<link rel="stylesheet" href="https://unpkg.com/blaze/scss/dist/components.inputs.min.css">
-
-	<style>
-		body {
-			font-family: 'Slabo 27px', serif;
-			font-size: 21px;
-		}
-	</style>
-
+	<meta name="author" content="Tendermint, Inc">
+	<link rel="stylesheet" href="/static/screen.css">
 	<!--[if lt IE 9]>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
 	<![endif]-->
 </head>
-
 <body>
-	<div style="width:40%; margin:0 auto;">
-		{{.}}
-	</div>
+	{{.}}
 </body>
 </html>`
 
@@ -88,6 +72,7 @@ func main() {
 		sequence = "0"
 	}
 
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 	http.HandleFunc("/", faucetHandler)
 	http.HandleFunc("/claim", getCoinsHandler)
 
@@ -132,7 +117,7 @@ func getCmd(command string) *exec.Cmd {
 
 func faucetHandler(w http.ResponseWriter, r *http.Request) {
 	data := `
-	<h1>Cosmos Hub Testnet Faucet</h1>
+	<h1>Cosmos Testnet Faucet</h1>
 	<form action="/claim" method="POST">
 	Address <input type="text" name="address" class="c-field" required>
 	<br>
