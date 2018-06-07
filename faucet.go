@@ -43,7 +43,7 @@ func main() {
 
 	chain = os.Getenv("CHAIN")
 	if chain == "" {
-		chain = "gaia-5001"
+		chain = "gaia-6000"
 	}
 
 	pass = os.Getenv("PASS")
