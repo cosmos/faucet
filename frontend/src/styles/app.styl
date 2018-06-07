@@ -1,0 +1,40 @@
+flex-version = flex
+support-for-ie = false
+vendor-prefixes = official
+@require '../../node_modules/nib/index.styl'
+@require 'variables'
+@require 'vendor/*'
+
+global-reset()
+reset-html5()
+
+*
+  box-sizing border-box
+
+html, body, #app
+  background var(--app-bg)
+
+html
+  overflow hidden
+
+a
+  color var(--link)
+  text-decoration none
+
+  &:hover
+    color var(--hover)
+
+#app
+  df()
+  color var(--txt)
+  padding-top 3rem
+  height 100vh
+  width 100vw
+  max-width 100% // fixes bug where horizontal scrollbar appears
+
+  display flex
+  flex-flow column nowrap
+  min-width 0
+
+.ni-field
+  border-radius 2px!important

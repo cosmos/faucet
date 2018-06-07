@@ -1,8 +1,8 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"html/template"
 	"io"
 	"log"
 	"net/http"
@@ -13,26 +13,6 @@ import (
 	"time"
 )
 
-const tpl = `
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="utf-8">
-	<title>Cosmos Testnet Faucet</title>
-	<meta name="description" content="A faucet to get some coins.">
-	<meta name="author" content="Tendermint, Inc">
-	<link rel="stylesheet" href="/static/screen.css">
-	<!--[if lt IE 9]>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
-	<![endif]-->
-</head>
-<body>
-	{{.}}
-</body>
-</html>`
-
-var pageTemplate = template.Must(template.New("page").Parse(tpl))
-
 var amount string
 var key string
 var node string
@@ -40,6 +20,10 @@ var chain string
 var pass string
 var faucet string
 var sequence string
+
+type claim_struct struct {
+	Address string
+}
 
 func main() {
 	amount = os.Getenv("AMOUNT")
@@ -72,8 +56,7 @@ func main() {
 		sequence = "0"
 	}
 
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
-	http.HandleFunc("/", faucetHandler)
+	http.Handle("/", http.FileServer(http.Dir("./frontend/dist/")))
 	http.HandleFunc("/claim", getCoinsHandler)
 
 	port := os.Getenv("PORT")
@@ -115,26 +98,17 @@ func getCmd(command string) *exec.Cmd {
 	return cmd
 }
 
-func faucetHandler(w http.ResponseWriter, r *http.Request) {
-	data := `
-	<h1>Cosmos Testnet Faucet</h1>
-	<form action="/claim" method="POST">
-	Address <input type="text" name="address" class="c-field" required>
-	<br>
-	<input type="submit" value="Claim" class="c-button c-button--info">
-	</form>
-	`
+func getCoinsHandler(w http.ResponseWriter, r *http.Request) {
+	decoder := json.NewDecoder(r.Body)
 
-	err := pageTemplate.Execute(w, template.HTML(data))
+	var claim claim_struct
+	err := decoder.Decode(&claim)
+
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		panic(err)
 	}
 
-	return
-}
-
-func getCoinsHandler(w http.ResponseWriter, r *http.Request) {
-	addr := r.FormValue("address")
+	addr := claim.Address
 	//sequence := executeGetSequence(faucet)
 
 	cmd := fmt.Sprintf("gaiacli send --amount=%v --to=%v --name=%v --chain-id=%v --sequence=%v", amount, addr, key, chain, sequence)
@@ -146,7 +120,6 @@ func getCoinsHandler(w http.ResponseWriter, r *http.Request) {
 	i++
 	sequence = strconv.Itoa(i)
 
-	faucetHandler(w, r)
 	return
 }
 
