@@ -1,0 +1,7 @@
+# Faucet Page
+faucetcosmos.network {
+    gzip
+    proxy / localhost:8080 {
+        transparent
+    }
+}
