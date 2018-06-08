@@ -1,7 +1,7 @@
 <template lang="pug">
 .section-header
   h1 Cosmos Testnet Faucet
-  p Hello intrepid spaceperson! Use this faucet to get tokens for the #[strong `gaia-6000`] testnet. Please don't abuse this service&mdash;the number of available tokens is limited.
+  p Hello intrepid spaceperson! Use this faucet to get tokens for the latest Cosmos testnet. Please don't abuse this service&mdash;the number of available tokens is limited.
 </template>
 
 <style lang="stylus">

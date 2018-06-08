@@ -1,5 +1,11 @@
 <template lang="pug">
 #app
+  .top-bar
+    .left
+      .key testnet:
+      .value gaia-tardigrade
+    .right
+      a(href="https://explorecosmos.network" target="_blank") explorer #[i.material-icons assessment]
   img(src="~assets/brandmark.png" width="512" height="512")
   router-view
   notifications(:notifications='notifications' theme='cosmos')
@@ -33,6 +39,39 @@ img
   left -7rem
   z-index 1
 
+.top-bar
+  position fixed
+  top 0
+  right 0
+  background var(--accent)
+  text-align center
+  height 3rem
+  width 100%
+  z-index 100
+
+  display flex
+  justify-content space-between
+  line-height 3rem
+
+  .left
+    display flex
+    padding 0 1rem
+  .key
+    text-transform: lowercase
+    margin-right 0.5rem
+  .value
+    font-weight bold
+    color var(--bright)
+  .right
+    a
+      display block
+      background var(--mc)
+      padding 0 1rem
+      color var(--bright)
+      display flex
+      align-items center
+      i
+        margin-left 0.5rem
 #bottom
   color var(--bc)
   font-size 0.75rem
