@@ -1,7 +1,7 @@
 <template lang="pug">
 #faucet
-  #form
-    form-header
+  .section
+    faucet-header
     form(v-on:submit.prevent='onSubmit', method='post')
       form-group(:error='$v.fields.captcha.$error'
         field-id='faucet-captcha' field-label='Captcha')
@@ -22,8 +22,9 @@
         form-msg(name='Address' type='bech32' :body="bech32error" v-else-if='!$v.fields.address.bech32Validate')
       form-group
         btn(v-if='sending' value='Sending...' disabled color="primary" size="lg")
-        btn(v-else @click='onSubmit' value="Send me tokens" color="primary" size="lg")
-  links
+        btn(v-else @click='onSubmit' value="Send me tokens" color="primary" size="lg" icon="send")
+  section-join
+  section-links
 </template>
 
 <script>
@@ -35,17 +36,19 @@ import Btn from "@nylira/vue-button";
 import Field from "@nylira/vue-field";
 import FormGroup from "../components/NiFormGroup";
 import FormMsg from "../components/NiFormMsg";
-import FormHeader from "../components/FormHeader";
-import Links from "../components/Links";
+import FaucetHeader from "../components/FaucetHeader";
+import SectionJoin from "../components/SectionJoin.vue";
+import SectionLinks from "../components/SectionLinks.vue";
 export default {
   name: "faucet",
   components: {
     Btn,
     Field,
     FormGroup,
-    FormHeader,
+    FaucetHeader,
     FormMsg,
-    Links,
+    SectionJoin,
+    SectionLinks,
     VueRecaptcha
   },
   data: () => ({
@@ -124,29 +127,32 @@ export default {
 @import '~variables'
 
 #faucet
-  max-width 32rem
+  max-width 40rem
   width 100%
   margin 0 auto
 
-#form
-  background var(--app-fg)
-  margin 0 0 1.5rem
-
+.section
+  margin 0.5rem
+  padding 1rem
+  background var(--app-bg)
+  position relative
+  z-index 10
   label
     display none
 
-  .ni-btn
-    width 100%
-
   input:-webkit-autofill
     -webkit-text-fill-color var(--txt) !important
-    -webkit-box-shadow: 0 0 0px 3rem var(--app-fg) inset
+    -webkit-box-shadow 0 0 0px 3rem var(--app-fg) inset
+
+  .section-main
+    padding 0 1rem
 
 @media screen and (min-width: 375px)
-  #form
-    padding 1rem
+  .section
+    padding 2rem 1rem
 
 @media screen and (min-width: 768px)
-  #form
-    padding 2rem
+  .section
+    padding 3rem 2rem
+    margin 1rem
 </style>
