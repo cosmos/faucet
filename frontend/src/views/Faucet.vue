@@ -1,17 +1,21 @@
 <template lang="pug">
 #faucet
   #form
-    header
-      h1 Cosmos Testnet Faucet
-      h2 Hello intrepid explorer! You can use this form to get tokens for the #[strong `gaia-6000`] testnet. Don't have a testnet address yet? #[a(href="https://cosmos.network/testnet") Join the testnet!]
+    form-header
     form(v-on:submit.prevent='onSubmit', method='post')
-      .li-form
-        label(for='faucet-captcha') Captcha
+      form-group(:error='$v.fields.captcha.$error'
+        field-id='faucet-captcha' field-label='Captcha')
         vue-recaptcha#faucet-captcha(:sitekey='recaptcha')
-      .li-form
-        label(for='faucet-address') Testnet Address
-        field#faucet-address(type='text', v-model='address', required='', size='lg' placeholder='Your testnet address')
-      .li-form
+      form-group(:error='$v.fields.address.$error'
+        field-id='faucet-address' field-label='Send To')
+        field#faucet-address(
+          type='text'
+          v-model='fields.address'
+          placeholder='Testnet address'
+          size="lg")
+        form-msg(name='Address' type='required' v-if='!$v.fields.address.required')
+        form-msg(name='Address' type='bech32' :body="bech32error" v-else-if='!$v.fields.address.bech32Validate')
+      form-group
         btn(type='submit', value='Send me tokens', size='lg', color='primary')
   links
 </template>
@@ -19,40 +23,85 @@
 <script>
 import axios from "axios";
 import VueRecaptcha from "vue-recaptcha";
+import { required } from "vuelidate/lib/validators";
+import b32 from "../scripts/b32";
 import Btn from "@nylira/vue-button";
 import Field from "@nylira/vue-field";
+import FormGroup from "../components/NiFormGroup";
+import FormMsg from "../components/NiFormMsg";
+import FormHeader from "../components/FormHeader";
 import Links from "../components/Links";
 export default {
   name: "faucet",
   components: {
     Btn,
     Field,
+    FormGroup,
+    FormHeader,
+    FormMsg,
     Links,
     VueRecaptcha
   },
   data: () => ({
-    address: "",
+    fields: {
+      captcha: false,
+      address: ""
+    },
     recaptcha: "6LdqyV0UAAAAAEqgBxvSsDpL2aeTEgkz_VTz1Vi1"
   }),
   methods: {
-    onSubmit() {
+    resetForm() {
+      this.fields.address = "";
+      this.fields.captcha = false;
+      this.$v.$reset();
+    },
+    async onSubmit() {
+      this.$v.$touch();
+      if (this.$v.$error) return;
+
+      this.sending = true;
+      let address = this.fields.address;
       axios
         .post("/claim", {
           address: this.address
         })
         .then(() => {
+          this.sending = false;
           this.$store.commit("notify", {
-            title: "Claim Succcessful",
-            body: "Refresh your wallet to get your tokens"
+            title: "Successfully Sent",
+            body: `Sent tokens to ${address}`
           });
+          this.resetForm();
         })
-        .catch(() => {
+        .catch(err => {
+          this.sending = false;
           this.$store.commit("notifyError", {
-            title: "Claim Error",
-            body: "There was an error claiming tokens"
+            title: "Error Sending",
+            body: `An error occurred while trying to send: "${err.message}"`
           });
         });
+    },
+    bech32Validate(param) {
+      try {
+        b32.decode(param);
+        this.bech32error = null;
+        return true;
+      } catch (error) {
+        this.bech32error = error.message;
+        return false;
+      }
     }
+  },
+  validations() {
+    return {
+      fields: {
+        address: {
+          required,
+          bech32Validate: this.bech32Validate
+        },
+        captcha: { required }
+      }
+    };
   }
 };
 </script>
@@ -66,35 +115,20 @@ export default {
   margin 0 auto
 
 #form
-  padding 1rem
   background var(--app-fg)
   margin 0 0 1.5rem
-
-  header
-    padding 0 0 1rem
-
-    strong
-      font-weight 500
-
-  h1
-    font-size 1.5rem
-    font-weight 600
-    color bright
-    margin-bottom 0.5rem
-
-  h2
-    color var(--dim)
-    font-size 0.875rem
 
   label
     display none
 
-  .li-form
-    padding 0.75rem 0
-
   .ni-btn
     width 100%
+
 @media screen and (min-width: 375px)
+  #form
+    padding 1rem
+
+@media screen and (min-width: 768px)
   #form
     padding 2rem
 </style>

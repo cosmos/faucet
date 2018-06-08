@@ -47,8 +47,4 @@ export default {
   color var(--bc)
   font-size 0.75rem
   padding 1rem 0
-
-@media screen and (min-width: 375px)
-  #links
-    padding 0 2rem
 </style>
