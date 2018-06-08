@@ -3,7 +3,7 @@
   .top-bar
     .left
       .key testnet:
-      .value gaia-tardigrade
+      .value gaia-6001
     .right
       a(href="https://explorecosmos.network" target="_blank") explorer #[i.material-icons assessment]
   img(src="~assets/brandmark.png" width="512" height="512")
