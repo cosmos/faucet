@@ -63,7 +63,8 @@ func main() {
 	if port == "" {
 		port = "8080"
 	}
-	log.Fatal(http.ListenAndServe(":"+port, nil))
+	// only serve to localhost
+	log.Fatal(http.ListenAndServe("127.0.0.1:"+port, nil))
 }
 
 func executeCmd(command string, writes ...string) {

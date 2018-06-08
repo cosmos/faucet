@@ -1,6 +1,6 @@
 <template lang="pug">
 #app
-  img(src="~assets/brandmark.png")
+  img(src="~assets/brandmark.png" width="512" height="512")
   router-view
   notifications(:notifications='notifications' theme='cosmos')
   #bottom &copy; 2018 Interchain Foundation
@@ -29,8 +29,8 @@ export default {
 
 img
   position absolute
-  top -20rem
-  left -20rem
+  top -7rem
+  left -7rem
   z-index 1
 
 #bottom
