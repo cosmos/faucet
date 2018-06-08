@@ -16,7 +16,8 @@
         form-msg(name='Address' type='required' v-if='!$v.fields.address.required')
         form-msg(name='Address' type='bech32' :body="bech32error" v-else-if='!$v.fields.address.bech32Validate')
       form-group
-        btn(type='submit', value='Send me tokens', size='lg', color='primary')
+        btn(v-if='sending' value='Sending...' disabled color="primary" size="lg")
+        btn(v-else @click='onSubmit' value="Send me tokens" color="primary" size="lg")
   links
 </template>
 
@@ -47,6 +48,7 @@ export default {
       captcha: false,
       address: ""
     },
+    sending: false,
     recaptcha: "6LdqyV0UAAAAAEqgBxvSsDpL2aeTEgkz_VTz1Vi1"
   }),
   methods: {
