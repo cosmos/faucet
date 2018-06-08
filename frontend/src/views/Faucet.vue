@@ -14,8 +14,6 @@
       .li-form
         btn(type='submit', value='Send me tokens', size='lg', color='primary')
   links
-  #bottom
-    | &copy; 2018 Interchain Foundation
 </template>
 
 <script>
@@ -68,37 +66,35 @@ export default {
   margin 0 auto
 
 #form
-  padding 0 1rem
+  padding 1rem
   background var(--app-fg)
-  margin 0 0 3rem
+  margin 0 0 1.5rem
 
   header
-    padding 1rem 0
+    padding 0 0 1rem
 
     strong
       font-weight 500
 
   h1
     font-size 1.5rem
-    font-weight 500
+    font-weight 600
     color bright
+    margin-bottom 0.5rem
 
   h2
     color var(--dim)
-    font-size sm
+    font-size 0.875rem
 
   label
     display none
 
   .li-form
-    padding 1rem 0
-    border-top 1px solid var(--bc)
+    padding 0.75rem 0
 
   .ni-btn
     width 100%
-
-#bottom
-  color var(--bc)
-  font-size 0.75rem
-  padding 1rem 0
+@media screen and (min-width: 375px)
+  #form
+    padding 2rem
 </style>

@@ -20,6 +20,8 @@
     target="_blank"
     title="Cosmos Website"
     subtitle="cosmos.network")
+  #bottom
+    | &copy; 2018 Interchain Foundation
 </template>
 
 <script>
@@ -39,4 +41,14 @@ export default {
 
 #links
   display block
+  padding 0 1rem
+
+#bottom
+  color var(--bc)
+  font-size 0.75rem
+  padding 1rem 0
+
+@media screen and (min-width: 375px)
+  #links
+    padding 0 2rem
 </style>

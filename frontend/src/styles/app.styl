@@ -14,9 +14,6 @@ reset-html5()
 html, body, #app
   background var(--app-bg)
 
-html
-  overflow hidden
-
 a
   color var(--link)
   text-decoration none
@@ -27,13 +24,6 @@ a
 #app
   df()
   color var(--txt)
-  height 100vh
-  width 100vw
-  max-width 100% // fixes bug where horizontal scrollbar appears
-
-  display flex
-  flex-flow column nowrap
-  min-width 0
 
 .ni-field
   border-radius 2px!important
