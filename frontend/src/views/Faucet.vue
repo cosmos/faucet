@@ -5,7 +5,12 @@
     form(v-on:submit.prevent='onSubmit', method='post')
       form-group(:error='$v.fields.captcha.$error'
         field-id='faucet-captcha' field-label='Captcha')
-        vue-recaptcha#faucet-captcha(:sitekey='recaptcha')
+        vue-recaptcha#faucet-captcha(
+          ref="recaptcha"
+          @verify="onVerify"
+          @expired="onExpired"
+          :sitekey="sitekey")
+        form-msg(name='Captcha' type='required' v-if='!$v.fields.captcha.required')
       form-group(:error='$v.fields.address.$error'
         field-id='faucet-address' field-label='Send To')
         field#faucet-address(
@@ -45,17 +50,24 @@ export default {
   },
   data: () => ({
     fields: {
-      captcha: false,
+      captcha: "",
       address: ""
     },
     sending: false,
-    recaptcha: "6LdqyV0UAAAAAEqgBxvSsDpL2aeTEgkz_VTz1Vi1"
+    sitekey: "6LdqyV0UAAAAAEqgBxvSsDpL2aeTEgkz_VTz1Vi1"
   }),
   methods: {
     resetForm() {
       this.fields.address = "";
-      this.fields.captcha = false;
+      this.fields.captcha = "";
+      this.$refs.recaptcha.reset(); // Direct call reset method
       this.$v.$reset();
+    },
+    onVerify() {
+      this.fields.captcha = "verified";
+    },
+    onExpired() {
+      this.$refs.recaptcha.reset(); // Direct call reset method
     },
     async onSubmit() {
       this.$v.$touch();
@@ -65,7 +77,7 @@ export default {
       let address = this.fields.address;
       axios
         .post("/claim", {
-          address: this.address
+          address: address
         })
         .then(() => {
           this.sending = false;
@@ -125,6 +137,10 @@ export default {
 
   .ni-btn
     width 100%
+
+  input:-webkit-autofill
+    -webkit-text-fill-color var(--txt) !important
+    -webkit-box-shadow: 0 0 0px 3rem var(--app-fg) inset
 
 @media screen and (min-width: 375px)
   #form

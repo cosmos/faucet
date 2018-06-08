@@ -1,7 +1,7 @@
 <template lang="pug">
 header#form-header
   h1 Cosmos Testnet Faucet
-  p Hello intrepid explorer! You can use this form to get tokens for the #[strong `gaia-6000`] testnet. Don't have a testnet address yet? #[a(href="https://cosmos.network/testnet") Join the testnet!]
+  p Hello intrepid spaceperson! Use this faucet to get tokens for the #[strong `gaia-6000`] testnet. There are a limited number of tokens in this faucet. Please don't abuse this service. Don't have a testnet address yet? #[a(href="https://cosmos.network/testnet") Join the testnet!]
 </template>
 
 <style lang="stylus">
