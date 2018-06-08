@@ -114,8 +114,12 @@ func getCoinsHandler(w http.ResponseWriter, r *http.Request) {
 
 	cmd := fmt.Sprintf("gaiacli send --amount=%v --to=%v --name=%v --chain-id=%v --sequence=%v", amount, addr, key, chain, sequence)
 	fmt.Println(cmd)
-
 	executeCmd(cmd, pass)
+
+	var amountTwo = "1steak"
+	cmdTwo := fmt.Sprintf("gaiacli send --amount=%v --to=%v --name=%v --chain-id=%v --sequence=%v", amountTwo, addr, key, chain, sequence)
+	fmt.Println(cmdTwo)
+	executeCmd(cmdTwo, pass)
 
 	i, _ := strconv.Atoi(sequence)
 	i++
