@@ -14,6 +14,7 @@
     "@nylira/vue-field": "^1.5.0",
     "@nylira/vue-notifications": "^1.5.0",
     "axios": "^0.18.0",
+    "bech32": "^1.1.3",
     "moment": "^2.22.2",
     "nib": "^1.1.2",
     "pug": "^2.0.3",
