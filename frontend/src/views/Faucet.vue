@@ -1,5 +1,5 @@
 <template lang="pug">
-#page
+#faucet
   #form
     header
       h1 Cosmos Testnet Faucet
@@ -13,19 +13,7 @@
         field#faucet-address(type='text', v-model='address', required='', size='lg' placeholder='Your testnet address')
       .li-form
         btn(type='submit', value='Send me tokens', size='lg', color='primary')
-  #links
-    a(href="https://cosmos.network" target="_blank")
-      .key Cosmos Website
-      .value cosmos.network
-    a(href="https://explorecosmos.network" target="_blank")
-      .key Network Explorer
-      .value explorecosmos.network
-    a(href="https://riot.im/app/#/room/#cosmos:matrix.org" target="_blank")
-      .key Community Chat
-      .value #cosmos
-    a(href="https://riot.im/app/#/room/#cosmos_validators:matrix.org" target="_blank")
-      .key Validator Chat
-      .value #cosmos_validators
+  links
   #bottom
     | &copy; 2018 Interchain Foundation
 </template>
@@ -35,11 +23,13 @@ import axios from "axios";
 import VueRecaptcha from "vue-recaptcha";
 import Btn from "@nylira/vue-button";
 import Field from "@nylira/vue-field";
+import Links from "../components/Links";
 export default {
-  name: "home",
+  name: "faucet",
   components: {
     Btn,
     Field,
+    Links,
     VueRecaptcha
   },
   data: () => ({
@@ -72,7 +62,7 @@ export default {
 <style lang="stylus">
 @import '~variables'
 
-#page
+#faucet
   max-width 32rem
   width 100%
   margin 0 auto
@@ -107,28 +97,8 @@ export default {
   .ni-btn
     width 100%
 
-#links
-  a
-    display block
-    line-height 2.5rem
-    border-top 1px solid var(--bc-dim)
-    display flex
-    justify-content space-between
-    padding 0 1rem
-    .key
-      color var(--dim)
-    .value
-      color var(--link)
-      font-size 0.75rem
-    &:hover
-      background var(--hover-bg)
-      .key
-        color var(--bright)
-      .value
-        color var(--hover)
 #bottom
   color var(--bc)
   font-size 0.75rem
-  padding 2rem 1rem 1rem
-
+  padding 1rem 0
 </style>
