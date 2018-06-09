@@ -14,6 +14,12 @@
   revision = "0e9736be20f9b0ca229b8f5eaf8305858a160994"
 
 [[projects]]
+  branch = "develop"
+  name = "github.com/tendermint/tmlibs"
+  packages = ["bech32"]
+  revision = "640af0205d98d1f45fb2f912f9c35c8bf816adc9"
+
+[[projects]]
   branch = "master"
   name = "github.com/tomasen/realip"
   packages = ["."]
@@ -22,6 +28,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "3fac5ae99b80c1484650c16b907a7c31de4e305811b1bdc45acc941285705d3a"
+  inputs-digest = "aa726cda084829a4f42ec9818ca6f5a9128105a26666167de854758ff0595e59"
   solver-name = "gps-cdcl"
   solver-version = 1

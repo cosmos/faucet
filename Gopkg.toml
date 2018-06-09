@@ -1,5 +1,4 @@
 # Gopkg.toml example
-#
 # Refer to https://github.com/golang/dep/blob/master/docs/Gopkg.toml.md
 # for detailed Gopkg.toml documentation.
 #
@@ -30,5 +29,5 @@
   unused-packages = true
 
 [[constraint]]
-  branch = "master"
-  name = "github.com/btcsuite/btcutil"
+  branch = "develop"
+  name = "github.com/tendermint/tmlibs"

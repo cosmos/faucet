@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/btcsuite/btcutil/bech32"
 	"github.com/dpapathanasiou/go-recaptcha"
+	"github.com/tendermint/tmlibs/bech32"
 	"github.com/tomasen/realip"
 	"io"
 	"log"
@@ -111,10 +111,14 @@ func getCoinsHandler(w http.ResponseWriter, request *http.Request) {
 	}
 
 	// make sure address is bech32
-	clientAddress := claim.Address
-	_, _, addressErr := bech32.Decode(clientAddress)
-	if addressErr != nil {
-		panic(addressErr)
+	readableAddress, decodedAddress, decodeErr := bech32.DecodeAndConvert(claim.Address)
+	if decodeErr != nil {
+		panic(decodeErr)
+	}
+	// re-encode the address in bech32
+	encodedAddress, encodeErr := bech32.ConvertAndEncode(readableAddress, decodedAddress)
+	if encodeErr != nil {
+		panic(encodeErr)
 	}
 
 	// make sure captcha is valid
@@ -128,16 +132,16 @@ func getCoinsHandler(w http.ResponseWriter, request *http.Request) {
 	// send the coins!
 	if captchaPassed {
 		sendFaucet := fmt.Sprintf(
-			"gaiacli send --amount=%v --to=%v --name=%v --chain-id=%v",
-			amountFaucet, clientAddress, key, chain)
+			"gaiacli send --to=%v --name=%v --chain-id=%v --amount=%v",
+			encodedAddress, key, chain, amountFaucet)
 		fmt.Println(sendFaucet)
 		executeCmd(sendFaucet, pass)
 
-		time.Sleep(2 * time.Second)
+		time.Sleep(5 * time.Second)
 
 		sendSteak := fmt.Sprintf(
-			"gaiacli send --amount=%v --to=%v --name=%v --chain-id=%v",
-			amountSteak, clientAddress, key, chain)
+			"gaiacli send --to=%v --name=%v --chain-id=%v --amount=%v",
+			encodedAddress, key, chain, amountSteak)
 		fmt.Println(sendSteak)
 		executeCmd(sendSteak, pass)
 	}
