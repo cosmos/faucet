@@ -134,15 +134,15 @@ func getCoinsHandler(w http.ResponseWriter, request *http.Request) {
 		sendFaucet := fmt.Sprintf(
 			"gaiacli send --to=%v --name=%v --chain-id=%v --amount=%v",
 			encodedAddress, key, chain, amountFaucet)
-		fmt.Println(sendFaucet)
+		fmt.Println(time.Now().UTC().Format(time.RFC3339), encodedAddress, "[1]")
 		executeCmd(sendFaucet, pass)
 
-		time.Sleep(5 * time.Second)
+		time.Sleep(2 * time.Second)
 
 		sendSteak := fmt.Sprintf(
 			"gaiacli send --to=%v --name=%v --chain-id=%v --amount=%v",
 			encodedAddress, key, chain, amountSteak)
-		fmt.Println(sendSteak)
+		fmt.Println(time.Now().UTC().Format(time.RFC3339), encodedAddress, "[2]")
 		executeCmd(sendSteak, pass)
 	}
 
