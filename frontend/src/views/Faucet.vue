@@ -86,7 +86,7 @@ export default {
           this.sending = false;
           this.$store.commit("notify", {
             title: "Successfully Sent",
-            body: `Sent tokens to ${this.fieldsaddress}`
+            body: `Sent tokens to ${this.fields.address}`
           });
           this.resetForm();
         })

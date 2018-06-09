@@ -3,6 +3,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/btcsuite/btcutil"
+  packages = ["bech32"]
+  revision = "d4cc87b860166d00d6b5b9e0d3b3d71d6088d4d4"
+
+[[projects]]
+  branch = "master"
   name = "github.com/dpapathanasiou/go-recaptcha"
   packages = ["."]
   revision = "0e9736be20f9b0ca229b8f5eaf8305858a160994"
@@ -16,6 +22,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d1a9ba0871a831339e727ce23d26bbb515616667e6bc4fd3fbc8cdcd356a78f8"
+  inputs-digest = "3fac5ae99b80c1484650c16b907a7c31de4e305811b1bdc45acc941285705d3a"
   solver-name = "gps-cdcl"
   solver-version = 1

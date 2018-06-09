@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/btcsuite/btcutil/bech32"
 	"github.com/dpapathanasiou/go-recaptcha"
 	"github.com/tomasen/realip"
 	"io"
@@ -100,23 +101,31 @@ func getCmd(command string) *exec.Cmd {
 }
 
 func getCoinsHandler(w http.ResponseWriter, request *http.Request) {
-	decoder := json.NewDecoder(request.Body)
 	var claim claim_struct
 
+	// decode JSON response from front end
+	decoder := json.NewDecoder(request.Body)
 	decoderErr := decoder.Decode(&claim)
 	if decoderErr != nil {
 		panic(decoderErr)
 	}
 
+	// make sure address is bech32
 	clientAddress := claim.Address
+	_, _, addressErr := bech32.Decode(clientAddress)
+	if addressErr != nil {
+		panic(addressErr)
+	}
+
+	// make sure captcha is valid
 	clientIP := realip.FromRequest(request)
 	captchaResponse := claim.Response
 	captchaPassed, captchaErr := recaptcha.Confirm(clientIP, captchaResponse)
-
 	if captchaErr != nil {
 		panic(captchaErr)
 	}
 
+	// send the coins!
 	if captchaPassed {
 		sendFaucet := fmt.Sprintf(
 			"gaiacli send --amount=%v --to=%v --name=%v --chain-id=%v",
