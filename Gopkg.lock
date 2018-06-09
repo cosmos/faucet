@@ -3,40 +3,19 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/btcsuite/btcd"
-  packages = [
-    "btcec",
-    "chaincfg",
-    "chaincfg/chainhash",
-    "wire"
-  ]
-  revision = "86fed781132ac890ee03e906e4ecd5d6fa180c64"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/btcsuite/btcutil"
-  packages = [
-    ".",
-    "base58",
-    "bech32"
-  ]
-  revision = "d4cc87b860166d00d6b5b9e0d3b3d71d6088d4d4"
-
-[[projects]]
-  branch = "master"
   name = "github.com/dpapathanasiou/go-recaptcha"
   packages = ["."]
   revision = "0e9736be20f9b0ca229b8f5eaf8305858a160994"
 
 [[projects]]
   branch = "master"
-  name = "golang.org/x/crypto"
-  packages = ["ripemd160"]
-  revision = "8ac0e0d97ce45cd83d1d7243c060cb8461dda5e9"
+  name = "github.com/tomasen/realip"
+  packages = ["."]
+  revision = "f0c99a92ddcedd3964a269d23c8e89d9a9229be6"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "603b3dff3b63c5347284644854ae77a76f5ed0e92aeaf971227d1ea0daf7b3e0"
+  inputs-digest = "d1a9ba0871a831339e727ce23d26bbb515616667e6bc4fd3fbc8cdcd356a78f8"
   solver-name = "gps-cdcl"
   solver-version = 1

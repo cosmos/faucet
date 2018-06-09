@@ -29,7 +29,7 @@
 
 <script>
 import axios from "axios";
-import VueReresponse from "vue-recaptcha";
+import VueRecaptcha from "vue-recaptcha";
 import { required } from "vuelidate/lib/validators";
 import b32 from "../scripts/b32";
 import Btn from "@nylira/vue-button";
@@ -49,7 +49,7 @@ export default {
     FormMsg,
     SectionJoin,
     SectionLinks,
-    VueReresponse
+    VueRecaptcha
   },
   data: () => ({
     fields: {

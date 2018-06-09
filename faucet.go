@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/dpapathanasiou/go-recaptcha"
+	"github.com/tomasen/realip"
 	"io"
 	"log"
 	"net/http"
@@ -23,7 +24,8 @@ var pass string
 var faucet string
 
 type claim_struct struct {
-	Address string
+	Address  string
+	Response string
 }
 
 func main() {
@@ -54,12 +56,12 @@ func main() {
 		fmt.Printf("usage: %s <reCaptcha private key>\n", filepath.Base(os.Args[0]))
 		os.Exit(1)
 	} else {
-		recaptcha.Init(os.Args[2])
+		recaptcha.Init(os.Args[1])
 
 		http.Handle("/", http.FileServer(http.Dir("./frontend/dist/")))
 		http.HandleFunc("/claim", getCoinsHandler)
 
-		if err := http.ListenAndServe("127.0.0,1:9001", nil); err != nil {
+		if err := http.ListenAndServe("127.0.0.1:8080", nil); err != nil {
 			log.Fatal("failed to start server", err)
 		}
 	}
@@ -97,35 +99,28 @@ func getCmd(command string) *exec.Cmd {
 	return cmd
 }
 
-func processRequest(request *http.Request) (result bool) {
-	recaptchaResponse, responseFound := request.Form["g-recaptcha-response"]
-	if responseFound {
-		result, err := recaptcha.Confirm("127.0.0.1", recaptchaResponse[0])
-		if err != nil {
-			log.Println("recaptcha server error", err)
-		}
-		return result
-	}
-	return false
-}
-
-func getCoinsHandler(w http.ResponseWriter, r *http.Request) {
-	decoder := json.NewDecoder(r.Body)
-
+func getCoinsHandler(w http.ResponseWriter, request *http.Request) {
+	decoder := json.NewDecoder(request.Body)
 	var claim claim_struct
-	err := decoder.Decode(&claim)
 
-	if err != nil {
-		panic(err)
+	decoderErr := decoder.Decode(&claim)
+	if decoderErr != nil {
+		panic(decoderErr)
 	}
 
-	var captcha = processRequest(r)
-	addr := claim.Address
+	clientAddress := claim.Address
+	clientIP := realip.FromRequest(request)
+	captchaResponse := claim.Response
+	captchaPassed, captchaErr := recaptcha.Confirm(clientIP, captchaResponse)
 
-	if captcha {
+	if captchaErr != nil {
+		panic(captchaErr)
+	}
+
+	if captchaPassed {
 		sendFaucet := fmt.Sprintf(
 			"gaiacli send --amount=%v --to=%v --name=%v --chain-id=%v",
-			amountFaucet, addr, key, chain)
+			amountFaucet, clientAddress, key, chain)
 		fmt.Println(sendFaucet)
 		executeCmd(sendFaucet, pass)
 
@@ -133,7 +128,7 @@ func getCoinsHandler(w http.ResponseWriter, r *http.Request) {
 
 		sendSteak := fmt.Sprintf(
 			"gaiacli send --amount=%v --to=%v --name=%v --chain-id=%v",
-			amountSteak, addr, key, chain)
+			amountSteak, clientAddress, key, chain)
 		fmt.Println(sendSteak)
 		executeCmd(sendSteak, pass)
 	}
