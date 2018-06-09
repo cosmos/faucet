@@ -3,33 +3,32 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/dpapathanasiou/go-recaptcha"
 	"io"
 	"log"
 	"net/http"
 	"os"
 	"os/exec"
-	"strconv"
+	"path/filepath"
 	"strings"
 	"time"
 )
 
-var amount string
+var amountFaucet string
+var amountSteak string
 var key string
 var node string
 var chain string
 var pass string
 var faucet string
-var sequence string
 
 type claim_struct struct {
 	Address string
 }
 
 func main() {
-	amount = os.Getenv("AMOUNT")
-	if amount == "" {
-		amount = "1steak"
-	}
+	amountFaucet = "10faucetToken"
+	amountSteak = "1steak"
 
 	key = os.Getenv("KEY")
 	if key == "" {
@@ -51,20 +50,19 @@ func main() {
 		pass = "1234567890"
 	}
 
-	sequence = os.Getenv("SEQUENCE")
-	if sequence == "" {
-		sequence = "0"
-	}
+	if len(os.Args) != 2 {
+		fmt.Printf("usage: %s <reCaptcha private key>\n", filepath.Base(os.Args[0]))
+		os.Exit(1)
+	} else {
+		recaptcha.Init(os.Args[2])
 
-	http.Handle("/", http.FileServer(http.Dir("./frontend/dist/")))
-	http.HandleFunc("/claim", getCoinsHandler)
+		http.Handle("/", http.FileServer(http.Dir("./frontend/dist/")))
+		http.HandleFunc("/claim", getCoinsHandler)
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
+		if err := http.ListenAndServe("127.0.0,1:9001", nil); err != nil {
+			log.Fatal("failed to start server", err)
+		}
 	}
-	// only serve to localhost
-	log.Fatal(http.ListenAndServe("127.0.0.1:"+port, nil))
 }
 
 func executeCmd(command string, writes ...string) {
@@ -99,6 +97,18 @@ func getCmd(command string) *exec.Cmd {
 	return cmd
 }
 
+func processRequest(request *http.Request) (result bool) {
+	recaptchaResponse, responseFound := request.Form["g-recaptcha-response"]
+	if responseFound {
+		result, err := recaptcha.Confirm("127.0.0.1", recaptchaResponse[0])
+		if err != nil {
+			log.Println("recaptcha server error", err)
+		}
+		return result
+	}
+	return false
+}
+
 func getCoinsHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 
@@ -109,47 +119,24 @@ func getCoinsHandler(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
+	var captcha = processRequest(r)
 	addr := claim.Address
-	//sequence := executeGetSequence(faucet)
 
-	cmd := fmt.Sprintf("gaiacli send --amount=%v --to=%v --name=%v --chain-id=%v --sequence=%v", amount, addr, key, chain, sequence)
-	fmt.Println(cmd)
-	executeCmd(cmd, pass)
+	if captcha {
+		sendFaucet := fmt.Sprintf(
+			"gaiacli send --amount=%v --to=%v --name=%v --chain-id=%v",
+			amountFaucet, addr, key, chain)
+		fmt.Println(sendFaucet)
+		executeCmd(sendFaucet, pass)
 
-	time.Sleep(2 * time.Second)
+		time.Sleep(2 * time.Second)
 
-	var amountTwo = "1steak"
-	cmdTwo := fmt.Sprintf("gaiacli send --amount=%v --to=%v --name=%v --chain-id=%v --sequence=%v", amountTwo, addr, key, chain, sequence)
-	fmt.Println(cmdTwo)
-	executeCmd(cmdTwo, pass)
-
-	i, _ := strconv.Atoi(sequence)
-	i++
-	sequence = strconv.Itoa(i)
+		sendSteak := fmt.Sprintf(
+			"gaiacli send --amount=%v --to=%v --name=%v --chain-id=%v",
+			amountSteak, addr, key, chain)
+		fmt.Println(sendSteak)
+		executeCmd(sendSteak, pass)
+	}
 
 	return
 }
-
-/*
-func executeGetSequence(addr string) (sequence int64) {
-	command := fmt.Sprintf("gaiacli account %v --node=%v --chain-id=%v", addr, node, chain)
-	fmt.Println(command)
-	cmd := getCmd(command)
-	bz, _ := cmd.CombinedOutput()
-	out := strings.Trim(string(bz), "\n")
-	time.Sleep(time.Second)
-
-	var res map[string]json.RawMessage
-	json.Unmarshal([]byte(out), &res)
-	fmt.Println(res)
-
-	var value map[string]json.RawMessage
-	json.Unmarshal([]byte(res["value"]), &value)
-	fmt.Println(value)
-
-	json.Unmarshal([]byte(value["sequence"]), &sequence)
-	fmt.Println(sequence)
-
-	return sequence
-}
-*/
