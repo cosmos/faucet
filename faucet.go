@@ -8,21 +8,29 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
 	"time"
 )
 
+var amount string
 var key string
 var node string
 var chain string
 var pass string
 var faucet string
+var sequence string
 
 type claim_struct struct {
 	Address string
 }
 
 func main() {
+	amount = os.Getenv("AMOUNT")
+	if amount == "" {
+		amount = "1steak"
+	}
+
 	key = os.Getenv("KEY")
 	if key == "" {
 		key = "default"
@@ -41,6 +49,11 @@ func main() {
 	pass = os.Getenv("PASS")
 	if pass == "" {
 		pass = "1234567890"
+	}
+
+	sequence = os.Getenv("SEQUENCE")
+	if sequence == "" {
+		sequence = "0"
 	}
 
 	http.Handle("/", http.FileServer(http.Dir("./frontend/dist/")))
@@ -97,16 +110,46 @@ func getCoinsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	addr := claim.Address
+	//sequence := executeGetSequence(faucet)
 
-	cmd := fmt.Sprintf("gaiacli send --amount=10faucetToken --to=%v --name=%v --chain-id=%v", addr, key, chain)
+	cmd := fmt.Sprintf("gaiacli send --amount=%v --to=%v --name=%v --chain-id=%v --sequence=%v", amount, addr, key, chain, sequence)
 	fmt.Println(cmd)
 	executeCmd(cmd, pass)
 
 	time.Sleep(2 * time.Second)
 
-	cmdTwo := fmt.Sprintf("gaiacli send --amount=1steak --to=%v --name=%v --chain-id=%v", addr, key, chain)
+	var amountTwo = "1steak"
+	cmdTwo := fmt.Sprintf("gaiacli send --amount=%v --to=%v --name=%v --chain-id=%v --sequence=%v", amountTwo, addr, key, chain, sequence)
 	fmt.Println(cmdTwo)
 	executeCmd(cmdTwo, pass)
 
+	i, _ := strconv.Atoi(sequence)
+	i++
+	sequence = strconv.Itoa(i)
+
 	return
 }
+
+/*
+func executeGetSequence(addr string) (sequence int64) {
+	command := fmt.Sprintf("gaiacli account %v --node=%v --chain-id=%v", addr, node, chain)
+	fmt.Println(command)
+	cmd := getCmd(command)
+	bz, _ := cmd.CombinedOutput()
+	out := strings.Trim(string(bz), "\n")
+	time.Sleep(time.Second)
+
+	var res map[string]json.RawMessage
+	json.Unmarshal([]byte(out), &res)
+	fmt.Println(res)
+
+	var value map[string]json.RawMessage
+	json.Unmarshal([]byte(res["value"]), &value)
+	fmt.Println(value)
+
+	json.Unmarshal([]byte(value["sequence"]), &sequence)
+	fmt.Println(sequence)
+
+	return sequence
+}
+*/
