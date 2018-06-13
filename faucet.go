@@ -45,7 +45,7 @@ func main() {
 
 	chain = os.Getenv("CHAIN")
 	if chain == "" {
-		chain = "gaia-6001"
+		chain = "gaia-6002"
 	}
 
 	pass = os.Getenv("PASS")
@@ -137,7 +137,7 @@ func getCoinsHandler(w http.ResponseWriter, request *http.Request) {
 		fmt.Println(time.Now().UTC().Format(time.RFC3339), encodedAddress, "[1]")
 		executeCmd(sendFaucet, pass)
 
-		time.Sleep(2 * time.Second)
+		time.Sleep(5 * time.Second)
 
 		sendSteak := fmt.Sprintf(
 			"gaiacli send --to=%v --name=%v --chain-id=%v --amount=%v",
