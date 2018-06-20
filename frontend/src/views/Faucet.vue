@@ -3,14 +3,14 @@
   .section
     faucet-header
     form(v-on:submit.prevent='onSubmit', method='post')
-      form-group(:error='$v.fields.captcha.$error'
-        field-id='faucet-captcha' field-label='Captcha')
-        vue-recaptcha#faucet-captcha(
+      form-group(:error='$v.fields.response.$error'
+        field-id='faucet-response' field-label='Captcha')
+        vue-recaptcha#faucet-response(
           ref="recaptcha"
           @verify="onVerify"
           @expired="onExpired"
           :sitekey="sitekey")
-        form-msg(name='Captcha' type='required' v-if='!$v.fields.captcha.required')
+        form-msg(name='Captcha' type='required' v-if='!$v.fields.response.required')
       form-group(:error='$v.fields.address.$error'
         field-id='faucet-address' field-label='Send To')
         field#faucet-address(
@@ -53,7 +53,7 @@ export default {
   },
   data: () => ({
     fields: {
-      captcha: "",
+      response: "",
       address: ""
     },
     sending: false,
@@ -62,31 +62,31 @@ export default {
   methods: {
     resetForm() {
       this.fields.address = "";
-      this.fields.captcha = "";
-      this.$refs.recaptcha.reset(); // Direct call reset method
+      this.fields.response = "";
+      this.$refs.recaptcha.reset();
       this.$v.$reset();
     },
-    onVerify() {
-      this.fields.captcha = "verified";
+    onVerify(response) {
+      this.fields.response = response;
     },
     onExpired() {
-      this.$refs.recaptcha.reset(); // Direct call reset method
+      this.$refs.recaptcha.reset();
     },
     async onSubmit() {
       this.$v.$touch();
       if (this.$v.$error) return;
 
       this.sending = true;
-      let address = this.fields.address;
       axios
         .post("/claim", {
-          address: address
+          address: this.fields.address,
+          response: this.fields.response
         })
         .then(() => {
           this.sending = false;
           this.$store.commit("notify", {
             title: "Successfully Sent",
-            body: `Sent tokens to ${address}`
+            body: `Sent tokens to ${this.fields.address}`
           });
           this.resetForm();
         })
@@ -116,7 +116,7 @@ export default {
           required,
           bech32Validate: this.bech32Validate
         },
-        captcha: { required }
+        response: { required }
       }
     };
   }
