@@ -1,5 +1,6 @@
 <template lang="pug">
 #app
+  tm-cookie-consent
   .top-bar
     .left
       .key testnet:
@@ -15,11 +16,14 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { TmCookieConsent } from "@tendermint/ui";
 import Notifications from "@nylira/vue-notifications";
+
 export default {
   name: "app",
   components: {
-    Notifications
+    Notifications,
+    TmCookieConsent
   },
   computed: {
     ...mapGetters(["notifications"])

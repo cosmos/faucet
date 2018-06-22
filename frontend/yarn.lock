@@ -755,6 +755,15 @@
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@nylira/vue-notifications/-/vue-notifications-1.5.0.tgz#a6f027c4ecd8ca99ed7dbbcc04d5b67288d8d0f6"
 
+"@tendermint/ui@^0.2.5":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@tendermint/ui/-/ui-0.2.6.tgz#8c173a6abcbddec53bccc75fba05e86f2d467957"
+  dependencies:
+    cookieconsent "^3.0.6"
+    moment "^2.22.2"
+    perfect-scrollbar "^1.4.0"
+    vue "^2.5.16"
+
 "@types/babel-types@*", "@types/babel-types@^7.0.0":
   version "7.0.2"
   resolved "https://registry.yarnpkg.com/@types/babel-types/-/babel-types-7.0.2.tgz#63dc3e5e7f6367e1819d2bba5213783cd926c5d5"
@@ -2363,6 +2372,10 @@ cookie-signature@1.0.6:
 cookie@0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.3.1.tgz#e7e0a1f9ef43b4c8ba925c5c5a96e806d16873bb"
+
+cookieconsent@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/cookieconsent/-/cookieconsent-3.0.6.tgz#147afa3e594e7b1a7826e49cb322aa0beee7b987"
 
 copy-concurrently@^1.0.0:
   version "1.0.5"
@@ -6480,6 +6493,10 @@ pbkdf2@^3.0.3:
 pend@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/pend/-/pend-1.2.0.tgz#7a57eb550a6783f9115331fcf4663d5c8e007a50"
+
+perfect-scrollbar@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/perfect-scrollbar/-/perfect-scrollbar-1.4.0.tgz#5d014ef9775e1f43058a1dbae9ed1daf0e7091f1"
 
 performance-now@^2.1.0:
   version "2.1.0"
