@@ -755,7 +755,7 @@
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/@nylira/vue-notifications/-/vue-notifications-1.5.0.tgz#a6f027c4ecd8ca99ed7dbbcc04d5b67288d8d0f6"
 
-"@tendermint/ui@^0.2.5":
+"@tendermint/ui@^0.2.6":
   version "0.2.6"
   resolved "https://registry.yarnpkg.com/@tendermint/ui/-/ui-0.2.6.tgz#8c173a6abcbddec53bccc75fba05e86f2d467957"
   dependencies:
