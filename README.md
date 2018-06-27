@@ -33,3 +33,9 @@ This will run the faucet on port 8080. It's highly recommended that you run a re
 ```
 go run faucet.go RECAPTCHA_SERVER_SIDE_SECRET
 ```
+
+## Optional: Caddy Faucet
+
+Included in this repo is an example `Caddyfile` that lets you run an TLS secured faucet with rate limiting default to 1 claim per IP per day.
+
+
