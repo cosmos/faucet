@@ -12,7 +12,7 @@ In the file `./frontend/src/views/Faucet.vue` on line 60, change the `sitekey` t
 sitekey: "6LdqyV0UAAAAAEqgBxvSsDpL2aeTEgkz_VTz1Vi1"
 ```
 
-## Prepare the Faucet
+## Build
 
 You need to have Golang and Yarn/Node.js installed on your system.
 
@@ -26,7 +26,7 @@ yarn && yarn build
 cd ..
 ```
 
-## Run the Faucet
+## Deploy
 
 This will run the faucet on port 8080. It's highly recommended that you run a reverse proxy with rate limiting in front of this app.
 
@@ -34,8 +34,6 @@ This will run the faucet on port 8080. It's highly recommended that you run a re
 go run faucet.go RECAPTCHA_SERVER_SIDE_SECRET
 ```
 
-## Optional: Caddy Faucet
+## Optional: Caddy
 
-Included in this repo is an example `Caddyfile` that lets you run an TLS secured faucet with rate limiting default to 1 claim per IP per day.
-
-
+Included in this repo is an example `Caddyfile` that lets you run an TLS secured faucet that is rate limited to 1 claim per IP per day.
