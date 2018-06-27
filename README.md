@@ -1,6 +1,6 @@
 # Cosmos Testnet Faucet
 
-This faucet app allows anyone to easily request 10 faucetToken and 1 steak.
+This faucet app allows anyone to easily request 10 faucetToken and 1 steak. This app needs to be deployed on a Cosmos testnet full node, because it relies on using the `gaiacli` command to send tokens.
 
 ## Get reCAPTCHA Key
 
@@ -11,6 +11,39 @@ In the file `./frontend/src/views/Faucet.vue` on line 60, change the `sitekey` t
 ```
 sitekey: "6LdqyV0UAAAAAEqgBxvSsDpL2aeTEgkz_VTz1Vi1"
 ```
+
+## Set ENV Variables
+
+The faucet requires 4 different enviroment variables to set in order to function. They are: 
+
+1. `KEY`, the name of your faucet account.
+2. `NODE`, the address of your `gaiad` node (probably don't have to change)
+3. `CHAIN`, the chain id of the testnet.
+4. `PASS`, the password of your faucet account.
+
+And here are the app's defaults if you don't set any environment variables:
+
+```
+key = os.Getenv("KEY")
+if key == "" {
+  key = "default"
+}
+
+node = os.Getenv("NODE")
+if node == "" {
+  node = "http://localhost:46657"
+}
+
+chain = os.Getenv("CHAIN")
+if chain == "" {
+  chain = "gaia-6002"
+}
+
+pass = os.Getenv("PASS")
+if pass == "" {
+  pass = "1234567890"
+}
+``
 
 ## Build
 
