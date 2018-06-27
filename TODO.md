@@ -1,5 +1,3 @@
 # TODO
 
-* implement error handling
-* use the rest server instead of executing commands
-* implement rate limiting
+* use the LCD REST server instead of executing commands
