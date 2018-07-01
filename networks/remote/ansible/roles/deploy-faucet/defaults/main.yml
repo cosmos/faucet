@@ -1,0 +1,6 @@
+---
+
+TESTNET_NAME: "{{APP_NAME}}"
+KEYNAME: "default"
+KEYPASS: "1234567890"
+

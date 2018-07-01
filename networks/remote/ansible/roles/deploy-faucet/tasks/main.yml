@@ -1,0 +1,55 @@
+---
+
+- name: Copy app binary
+  copy:
+    src: "{{BINARY}}"
+    dest: /usr/bin
+    mode: 0755
+  notify: restart app
+
+- name: Copy gaiacli binary
+  copy:
+    src: "{{GAIACLIBINARY}}"
+    dest: /usr/bin
+    mode: 0755
+
+- name: Copy key injector
+  copy: src=gaiakeyinjector dest=/usr/bin mode=0755
+
+- name: Install expect
+  yum: name=expect state=installed
+- command: rm -rf /home/gaiad/.gaiacli
+- name: Inject gaia wallet
+  shell: "/usr/bin/gaiakeyinjector {{KEYNAME | default('default')}}"
+  register: out
+  failed_when: "'ERROR' in out.stdout or out.rc != 0"
+  environment:
+    SEEDWORDS: "{{SEEDWORDS}}"
+    KEYPASS: "{{KEYPASS}}"
+  become: yes
+  become_user: gaiad
+
+- name: Create frontend folder
+  file: path=/home/gaiad/frontend state=directory owner=gaiad group=gaiad
+
+- name: Unpack frontend archive
+  unarchive: "src={{DISTTGZ}} dest=/home/gaiad/frontend owner=gaiad group=gaiad"
+
+- name: Create app service
+  template: src=faucet.service.j2 dest=/etc/systemd/system/faucet.service owner=root group=root mode=0400
+  notify: systemctl daemon-reload
+
+- name: Install epel-release
+  yum: name=epel-release state=installed
+
+- name: Install nginx
+  yum: name=nginx state=installed
+  notify: start nginx
+
+- name: Enable nginx local cross-process proxy
+  command: "setsebool -P httpd_can_network_connect 1"
+
+- name: Copy nginx reverse proxy config
+  template: src=nginx.conf.j2 dest=/etc/nginx/nginx.conf owner=root group=root
+  notify: reload nginx
+

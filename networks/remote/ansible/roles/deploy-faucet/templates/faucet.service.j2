@@ -1,0 +1,21 @@
+[Unit]
+Description=faucet
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+Environment="KEY={{KEYNAME}}"
+Environment="CHAIN={{TESTNET_NAME}}"
+Environment="PASS={{KEYPASS}}"
+WorkingDirectory=/home/gaiad
+Restart=on-failure
+User=gaiad
+Group=gaiad
+PermissionsStartOnly=true
+ExecStart=/usr/bin/faucet {{SECRETKEY}}
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=multi-user.target
+

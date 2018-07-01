@@ -1,0 +1,14 @@
+---
+
+- name: systemctl daemon-reload
+  systemd: name=faucet.service enabled=yes daemon_reload=yes
+
+- name: restart app
+  service: name=faucet state=restarted
+
+- name: reload nginx
+  service: name=nginx state=reloaded
+
+- name: start nginx
+  service: name=nginx state=started
+
