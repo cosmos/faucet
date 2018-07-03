@@ -23,6 +23,7 @@ var amountSteak string
 var key string
 var pass string
 var node string
+var publicUrl string
 
 type claim_struct struct {
 	Address  string
@@ -45,19 +46,20 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-	chain = getEnv("CHAIN")
-	recaptchaSecretKey = getEnv("RECAPTCHA_SECRET_KEY")
-	amountFaucet = getEnv("AMOUNT_FAUCET")
-	amountSteak = getEnv("AMOUNT_STEAK")
-	key = getEnv("KEY")
-	pass = getEnv("PASS")
-	node = getEnv("NODE")
+	chain = getEnv("FAUCET_CHAIN")
+	recaptchaSecretKey = getEnv("FAUCET_RECAPTCHA_SECRET_KEY")
+	amountFaucet = getEnv("FAUCET_AMOUNT_FAUCET")
+	amountSteak = getEnv("FAUCET_AMOUNT_STEAK")
+	key = getEnv("FAUCET_KEY")
+	pass = getEnv("FAUCET_PASS")
+	node = getEnv("FAUCET_NODE")
+	publicUrl = getEnv("FAUCET_PUBLIC_URL")
 
 	recaptcha.Init(recaptchaSecretKey)
 
 	http.HandleFunc("/claim", getCoinsHandler)
 
-	if err := http.ListenAndServe("127.0.0.1:8000", nil); err != nil {
+	if err := http.ListenAndServe(publicUrl, nil); err != nil {
 		log.Fatal("failed to start server", err)
 	}
 }
