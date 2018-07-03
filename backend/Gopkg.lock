@@ -14,6 +14,12 @@
   revision = "0e9736be20f9b0ca229b8f5eaf8305858a160994"
 
 [[projects]]
+  name = "github.com/joho/godotenv"
+  packages = ["."]
+  revision = "a79fa1e548e2c689c241d10173efd51e5d689d5b"
+  version = "v1.2.0"
+
+[[projects]]
   branch = "develop"
   name = "github.com/tendermint/tmlibs"
   packages = ["bech32"]
@@ -28,6 +34,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "aa726cda084829a4f42ec9818ca6f5a9128105a26666167de854758ff0595e59"
+  inputs-digest = "bc08e3bd4a38ebde54ed7bee86bdbe8bb6763f1a7739ef721ac5d580fb30da0a"
   solver-name = "gps-cdcl"
   solver-version = 1

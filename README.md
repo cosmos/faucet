@@ -1,72 +1,73 @@
 # Cosmos Testnet Faucet
 
-This faucet app allows anyone to easily request 10 faucetToken and 1 steak. This app needs to be deployed on a Cosmos testnet full node, because it relies on using the `gaiacli` command to send tokens.
+This faucet app allows anyone who passes a captcha to request tokens for a Cosmos account address. This app needs to be deployed on a Cosmos testnet full node, because it relies on using the `gaiacli` command to send tokens.
 
-## Get reCAPTCHA Key
+## Prerequisites
 
-Go to the [Google reCAPTCHA Admin](https://www.google.com/recaptcha/admin) and create a new reCAPTCHA site. For the version of captcha, choose `reCAPTCHA v2`.
+### reCAPTCHA
 
-In the file `./frontend/src/views/Faucet.vue` on line 60, change the `sitekey` to your new reCAPTCHA client side integration site key.
+If you don't have a reCAPTCHA site setup for the faucet, now is the time to get one. Go to the [Google reCAPTCHA Admin](https://www.google.com/recaptcha/admin) and create a new reCAPTCHA site. For the version of captcha, choose `reCAPTCHA v2`.
 
-```
-sitekey: "6LdqyV0UAAAAAEqgBxvSsDpL2aeTEgkz_VTz1Vi1"
-```
+### Checkout Code
 
-## Set ENV Variables
-
-The faucet requires 4 different enviroment variables to set in order to function. They are: 
-
-1. `KEY`, the name of your faucet account.
-2. `NODE`, the address of your `gaiad` node (probably don't have to change)
-3. `CHAIN`, the chain id of the testnet.
-4. `PASS`, the password of your faucet account.
-
-And here are the app's defaults if you don't set any environment variables:
+The backend requires Go and the `dep` dependency tool to be installed. For the frontend, you also need to have node.js and the `yarn` dependency tool installed. 
 
 ```
-key = os.Getenv("KEY")
-if key == "" {
-  key = "default"
-}
-
-node = os.Getenv("NODE")
-if node == "" {
-  node = "http://localhost:46657"
-}
-
-chain = os.Getenv("CHAIN")
-if chain == "" {
-  chain = "gaia-6002"
-}
-
-pass = os.Getenv("PASS")
-if pass == "" {
-  pass = "1234567890"
-}
+go get git@github.com:cosmos/faucet
 ```
 
-## Build
+## Backend Setup
 
-You need to have Golang and Yarn/Node.js installed on your system.
+### Production
+
+First, set the environment variables for the backend, using `./backend/.env` as a template:
 
 ```
-go get $GOPATH/src/github.com/cosmos/faucet
-cd $GOPATH/src/github.com/cosmos/faucet
+cd $GOPATH/src/github.com/cosmos/faucet/backend
+cp .env .env.local
+vi .env.local
+```
+
+Then build the backend.
+
+```
 dep ensure
-
-cd frontend
-yarn && yarn build
-cd ..
+go build faucet.go
 ```
 
-## Deploy
-
-This will run the faucet on port 8080. It's highly recommended that you run a reverse proxy with rate limiting in front of this app.
+The following executable will run the faucet on port 8080. 
 
 ```
-go run faucet.go RECAPTCHA_SERVER_SIDE_SECRET
+./faucet
 ```
 
-## Optional: Caddy
+**WARNING**: It's highly recommended to run a reverse proxy with rate limiting in front of this app. Included in this repo is an example `Caddyfile` that lets you run an TLS secured faucet that is rate limited to 1 claim per IP per day.
 
-Included in this repo is an example `Caddyfile` that lets you run an TLS secured faucet that is rate limited to 1 claim per IP per day.
+### Development
+
+Run `go run faucet,.go` in the `backend` directory to serve the backend.
+
+## Frontend Setup
+
+### Production
+
+First, set the environment variables for the frontend, using `./frontend/.env` as a template:
+
+```
+cd $GOPATH/src/github.com/cosmos/faucet/frontend
+cp .env .env.local
+vi .env.local
+```
+
+Then build the frontend.
+
+```
+yarn
+yarn build
+```
+
+Lastly, serve the `./frontend/dist` directory with the web server of your choice.
+
+### Development
+
+Run `yarn serve` in the `frontend` directory to serve the frontend with hot reload.
