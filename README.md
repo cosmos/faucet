@@ -10,6 +10,8 @@ If you don't have a reCAPTCHA site setup for the faucet, now is the time to get 
 
 ### Checkout Code
 
+For the backend, need to have Go and the `dep` dependency tool installed on your system. For the frontend, you also need to have node.js and the `yarn` dependency tool installed on your system. 
+
 ```
 go get git@github.com:cosmos/faucet
 ```
@@ -18,7 +20,7 @@ go get git@github.com:cosmos/faucet
 
 ### Production
 
-You need to have Go and the `dep` dependency tool installed on your system. First, set the environment variables for the backend:
+First, set the environment variables for the backend:
 
 ```
 cd $GOPATH/src/github.com/cosmos/faucet/backend
@@ -48,7 +50,7 @@ Run `go run faucet,.go` in the `backend` directory to serve the backend.
 
 ### Production
 
-You need to have node.js and the `yarn` dependency tool installed on your system. First, set the environment variables for the frontend:
+First, set the environment variables for the frontend:
 
 ```
 cd $GOPATH/src/github.com/cosmos/faucet/frontend
