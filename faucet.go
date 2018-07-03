@@ -16,14 +16,14 @@ import (
 	"time"
 )
 
+var chain string
+var recaptchaSecretKey string
+var frontendDir string
 var amountFaucet string
 var amountSteak string
 var key string
-var node string
-var chain string
 var pass string
-var faucet string
-var recaptchaSecretKey string
+var node string
 
 type claim_struct struct {
 	Address  string
@@ -46,17 +46,18 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
+	chain = getEnv("CHAIN")
+	recaptchaSecretKey = getEnv("RECAPTCHA_SECRET_KEY")
+	frontendDir = getEnv("FRONTEND_DIR")
 	amountFaucet = getEnv("AMOUNT_FAUCET")
 	amountSteak = getEnv("AMOUNT_STEAK")
 	key = getEnv("KEY")
-	node = getEnv("NODE")
-	chain = getEnv("CHAIN")
 	pass = getEnv("PASS")
-	recaptchaSecretKey = getEnv("RECAPTCHA_SECRET_KEY")
+	node = getEnv("NODE")
 
 	recaptcha.Init(recaptchaSecretKey)
 
-	http.Handle("/", http.FileServer(http.Dir("./frontend/dist/")))
+	http.Handle("/", http.FileServer(http.Dir(frontendDir)))
 	http.HandleFunc("/claim", getCoinsHandler)
 
 	if err := http.ListenAndServe("127.0.0.1:8080", nil); err != nil {
