@@ -11,7 +11,7 @@ If you don't have a reCAPTCHA site setup for the faucet, now is the time to get 
 ### Checkout Code
 
 ```
-git clone git@github.com:cosmos/faucet
+go get git@github.com:cosmos/faucet
 ```
 
 ## Backend Setup
