@@ -9,7 +9,7 @@
           ref="recaptcha"
           @verify="onVerify"
           @expired="onExpired"
-          :sitekey="sitekey")
+          :sitekey="config.recaptchaSiteKey")
         form-msg(name='Captcha' type='required' v-if='!$v.fields.response.required')
       form-group(:error='$v.fields.address.$error'
         field-id='faucet-address' field-label='Send To')
@@ -30,6 +30,7 @@
 <script>
 import axios from "axios";
 import VueRecaptcha from "vue-recaptcha";
+import { mapGetters } from "vuex";
 import { required } from "vuelidate/lib/validators";
 import b32 from "../scripts/b32";
 import Btn from "@nylira/vue-button";
@@ -51,13 +52,15 @@ export default {
     SectionLinks,
     VueRecaptcha
   },
+  computed: {
+    ...mapGetters(["config"])
+  },
   data: () => ({
     fields: {
       response: "",
       address: ""
     },
-    sending: false,
-    sitekey: "6LdqyV0UAAAAAEqgBxvSsDpL2aeTEgkz_VTz1Vi1"
+    sending: false
   }),
   methods: {
     resetForm() {

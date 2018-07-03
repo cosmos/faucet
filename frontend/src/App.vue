@@ -4,7 +4,7 @@
   .top-bar
     .left
       .key testnet:
-      .value gaia-6002
+      .value {{ config.chain }}
     .right
       a(href="https://explorecosmos.network" target="_blank") explorer #[i.material-icons assessment]
   img(src="~assets/brandmark.png" width="512" height="512")
@@ -26,7 +26,7 @@ export default {
     TmCookieConsent
   },
   computed: {
-    ...mapGetters(["notifications"])
+    ...mapGetters(["notifications", "config"])
   },
   mounted() {}
 };

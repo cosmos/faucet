@@ -1,12 +1,9 @@
 const state = {
-  bCamera: false // static camera?
+  chain: process.env.VUE_APP_CHAIN,
+  recaptchaSiteKey: process.env.VUE_APP_RECAPTCHA_SITE_KEY
 };
 
-const mutations = {
-  setCamera(state, value) {
-    state.bCamera = value;
-  }
-};
+const mutations = {};
 
 export default {
   state,
