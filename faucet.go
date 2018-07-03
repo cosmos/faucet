@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/dpapathanasiou/go-recaptcha"
+	"github.com/joho/godotenv"
 	"github.com/tendermint/tmlibs/bech32"
 	"github.com/tomasen/realip"
 	"io"
@@ -11,7 +12,6 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 	"time"
 )
@@ -23,48 +23,44 @@ var node string
 var chain string
 var pass string
 var faucet string
+var recaptchaSecretKey string
 
 type claim_struct struct {
 	Address  string
 	Response string
 }
 
-func main() {
-	amountFaucet = "10faucetToken"
-	amountSteak = "1steak"
-
-	key = os.Getenv("KEY")
-	if key == "" {
-		key = "default"
-	}
-
-	node = os.Getenv("NODE")
-	if node == "" {
-		node = "http://localhost:46657"
-	}
-
-	chain = os.Getenv("CHAIN")
-	if chain == "" {
-		chain = "gaia-6002"
-	}
-
-	pass = os.Getenv("PASS")
-	if pass == "" {
-		pass = "1234567890"
-	}
-
-	if len(os.Args) != 2 {
-		fmt.Printf("usage: %s <reCaptcha private key>\n", filepath.Base(os.Args[0]))
-		os.Exit(1)
+func getEnv(key string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		fmt.Println(key, "=", value)
+		return value
 	} else {
-		recaptcha.Init(os.Args[1])
+		log.Fatal("Error loading environment variable: ", key)
+		return ""
+	}
+}
 
-		http.Handle("/", http.FileServer(http.Dir("./frontend/dist/")))
-		http.HandleFunc("/claim", getCoinsHandler)
+func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
-		if err := http.ListenAndServe("127.0.0.1:8080", nil); err != nil {
-			log.Fatal("failed to start server", err)
-		}
+	amountFaucet = getEnv("AMOUNT_FAUCET")
+	amountSteak = getEnv("AMOUNT_STEAK")
+	key = getEnv("KEY")
+	node = getEnv("NODE")
+	chain = getEnv("CHAIN")
+	pass = getEnv("PASS")
+	recaptchaSecretKey = getEnv("RECAPTCHA_SECRET_KEY")
+
+	recaptcha.Init(recaptchaSecretKey)
+
+	http.Handle("/", http.FileServer(http.Dir("./frontend/dist/")))
+	http.HandleFunc("/claim", getCoinsHandler)
+
+	if err := http.ListenAndServe("127.0.0.1:8080", nil); err != nil {
+		log.Fatal("failed to start server", err)
 	}
 }
 
