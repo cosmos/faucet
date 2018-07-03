@@ -10,7 +10,7 @@ If you don't have a reCAPTCHA site setup for the faucet, now is the time to get 
 
 ### Checkout Code
 
-For the backend, need to have Go and the `dep` dependency tool installed on your system. For the frontend, you also need to have node.js and the `yarn` dependency tool installed on your system. 
+The backend requires Go and the `dep` dependency tool to be installed. For the frontend, you also need to have node.js and the `yarn` dependency tool installed. 
 
 ```
 go get git@github.com:cosmos/faucet
