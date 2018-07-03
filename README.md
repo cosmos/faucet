@@ -20,11 +20,12 @@ go get git@github.com:cosmos/faucet
 
 ### Production
 
-First, set the environment variables for the backend:
+First, set the environment variables for the backend, using `./backend/.env` as a template:
 
 ```
 cd $GOPATH/src/github.com/cosmos/faucet/backend
-vi .env
+cp .env .env.local
+vi .env.local
 ```
 
 Then build the backend.
@@ -50,11 +51,12 @@ Run `go run faucet,.go` in the `backend` directory to serve the backend.
 
 ### Production
 
-First, set the environment variables for the frontend:
+First, set the environment variables for the frontend, using `./frontend/.env` as a template:
 
 ```
 cd $GOPATH/src/github.com/cosmos/faucet/frontend
-vi .env
+cp .env .env.local
+vi .env.local
 ```
 
 Then build the frontend.
