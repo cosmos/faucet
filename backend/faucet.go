@@ -57,7 +57,7 @@ func main() {
 
 	http.HandleFunc("/claim", getCoinsHandler)
 
-	if err := http.ListenAndServe("127.0.0.1:8080", nil); err != nil {
+	if err := http.ListenAndServe("127.0.0.1:8000", nil); err != nil {
 		log.Fatal("failed to start server", err)
 	}
 }
