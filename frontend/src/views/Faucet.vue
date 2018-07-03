@@ -81,7 +81,7 @@ export default {
 
       this.sending = true;
       axios
-        .post("/claim", {
+        .post(this.config.claimUrl, {
           address: this.fields.address,
           response: this.fields.response
         })

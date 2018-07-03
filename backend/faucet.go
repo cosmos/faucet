@@ -18,7 +18,6 @@ import (
 
 var chain string
 var recaptchaSecretKey string
-var frontendDir string
 var amountFaucet string
 var amountSteak string
 var key string
@@ -48,7 +47,6 @@ func main() {
 
 	chain = getEnv("CHAIN")
 	recaptchaSecretKey = getEnv("RECAPTCHA_SECRET_KEY")
-	frontendDir = getEnv("FRONTEND_DIR")
 	amountFaucet = getEnv("AMOUNT_FAUCET")
 	amountSteak = getEnv("AMOUNT_STEAK")
 	key = getEnv("KEY")
@@ -57,7 +55,6 @@ func main() {
 
 	recaptcha.Init(recaptchaSecretKey)
 
-	http.Handle("/", http.FileServer(http.Dir(frontendDir)))
 	http.HandleFunc("/claim", getCoinsHandler)
 
 	if err := http.ListenAndServe("127.0.0.1:8080", nil); err != nil {
