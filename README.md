@@ -21,7 +21,7 @@ go get git@github.com:cosmos/faucet
 You need to have Go and the `dep` dependency tool installed on your system. First, set the environment variables for the backend:
 
 ```
-cd faucet/backend
+cd $GOPATH/src/github.com/cosmos/faucet/backend
 vi .env
 ```
 
@@ -51,7 +51,7 @@ Run `go run faucet,.go` in the `frontend` directory to serve the backend.
 You need to have node.js and the `yarn` dependency tool installed on your system. First, set the environment variables for the frontend:
 
 ```
-cd faucet/frontend
+cd $GOPATH/src/github.com/cosmos/faucet/frontend
 vi .env
 ```
 
