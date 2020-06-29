@@ -1,3 +1,4 @@
+> This repo is archived as of June 29, 2020 but made available for historical record.
 # Cosmos Testnet Faucet
 
 This faucet app allows anyone who passes a captcha to request tokens for a Cosmos account address. This app needs to be deployed on a Cosmos testnet full node, because it relies on using the `gaiacli` command to send tokens.
