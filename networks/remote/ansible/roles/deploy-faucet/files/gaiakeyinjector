@@ -1,0 +1,42 @@
+#!/usr/bin/expect -f
+
+##
+# Usage:
+#  export KEYPASS
+#  export SEEDWORDS
+# Usage: gaiakeyinjector <name>
+##
+
+# Set defaults
+set timeout 1
+log_user 0
+
+# Sensitive input parameters from the environment
+set KEYPASS $env(KEYPASS)
+set SEEDWORDS $env(SEEDWORDS)
+
+# Input parameters from the command-line
+set NAME [lindex $argv 0]
+
+spawn $env(SHELL) -c "gaiacli keys add --recover $NAME"
+
+expect {
+  timeout { send_user "\nUnexpected text from gaiacli (1).\n"; exit 1 }
+  "Enter a passphrase for your key:"
+}
+send "$KEYPASS\r"
+
+expect {
+  timeout { send_user "\nUnexpected text from gaiacli (2).\n"; exit 1 }
+  "Repeat the passphrase:"
+}
+send "$KEYPASS\r"
+
+expect {
+  timeout { send_user "\nUnexpected text from gaiacli. (3)\n"; exit 1 }
+  "Enter your recovery seed phrase:"
+}
+send "$SEEDWORDS\r"
+
+interact
+

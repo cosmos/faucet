@@ -1,0 +1,9 @@
+---
+# BINARY, DISTTGZ, SECRETKEY (Recaptcha), SEEDWORDS (gaia key recovery) is required
+# KEYNAME, KEYPASS and TESTNET_NAME is optional
+
+- hosts: all
+  gather_facts: no
+  roles:
+    - deploy-faucet
+
